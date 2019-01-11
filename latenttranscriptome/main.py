@@ -1,6 +1,6 @@
 import click
-import factembseq.utils.training as training
-import factembseq.utils.configuration as configuration
+import latenttranscriptome.utils.training as training
+import latenttranscriptome.utils.configuration as configuration
 
 @click.group()
 def run():

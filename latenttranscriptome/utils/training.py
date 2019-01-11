@@ -8,8 +8,8 @@ import numpy as np
 import random
 from collections import OrderedDict
 import copy
-import factembseq.utils.configuration as configuration
-import factembseq.utils.monitoring as monitoring
+import latenttranscriptome.utils.configuration as configuration
+import latenttranscriptome.utils.monitoring as monitoring
 
 _LOG = logging.getLogger(__name__)
 

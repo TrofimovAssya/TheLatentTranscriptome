@@ -1,4 +1,4 @@
-# factembseq
+# The Latent Transcriptome
 
 ## Installation
 
@@ -14,18 +14,12 @@ pip install -e .
 pip install -r requirements.txt
 ```
 
-The following environment variables also need to be defined:
-```
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
-```
-
 
 ## Training
 For now, a config file needs to be defined to run the experiments. An exemple can be found in `config/mnist.yml`
 To run the code, simply launch
 ```
-iia.factembseq train --config iia/factembseq/config/mnist.yml
+iia.latenttranscriptome train --config latenttranscriptome/config/mnist.yml
 ```
 
 ## Monitoring
@@ -47,7 +41,7 @@ Steps to launch bayesian hyperparameters search:
         lr: "Real(10**-4, 10**-2, 'log-uniform')"
     ```
     search the learning rate in the range (0.01, 0.0001), on a log scale. For more examples, please refer to [the official documentation](https://scikit-optimize.github.io/#skopt.BayesSearchCV).
-3. Launch your config file with `iia.factembseq train-skopt --config your/config/path.yml`
+3. Launch your config file with `iia.latenttranscriptome train-skopt --config your/config/path.yml`
 
 An config example can be found in `config/mnist_skopt.yml`
 
