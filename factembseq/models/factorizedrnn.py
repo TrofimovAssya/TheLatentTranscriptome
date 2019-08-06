@@ -1,8 +1,8 @@
 import torch
 import torch.nn.functional as F
 from torch import nn
-import latenttranscriptome.utils.register as register
-from latenttranscriptome.models.factorizedmlp import FactorizedMLP
+import factembseq.utils.register as register
+from factembseq.models.factorizedmlp import FactorizedMLP
 
 @register.setmodelname("FactorizedRNN")
 class FactorizedRNN(FactorizedMLP):

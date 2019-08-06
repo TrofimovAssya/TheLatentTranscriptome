@@ -2,8 +2,8 @@ import importlib
 import inspect
 import logging
 import yaml
-import latenttranscriptome.models as models
-import latenttranscriptome.datasets as datasets
+import factembseq.models as models
+import factembseq.datasets as datasets
 import torchvision
 
 _LOG = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ def setup_dataset(config, split='train'):
     Prepare data generators for training set and optionally for validation set
     """
 
-    available_datasets = get_available_classes(datasets, 'latenttranscriptome.datasets.', '_DG_NAME')
+    available_datasets = get_available_classes(datasets, 'factembseq.datasets.', '_DG_NAME')
     datasets_from_module = importlib.import_module('torchvision.datasets')
 
     dataset_name = list(config['dataset'][split].keys())[0]
@@ -75,7 +75,7 @@ def setup_model(config, yaml_section='model'):
     Prepare model according to config file
     """
 
-    available_models = get_available_classes(models, 'latenttranscriptome.models.', '_MODEL_NAME')
+    available_models = get_available_classes(models, 'factembseq.models.', '_MODEL_NAME')
     models_from_module = importlib.import_module('torchvision.models')
 
     model_name = list(config[yaml_section].keys())[0]
