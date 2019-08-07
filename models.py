@@ -7,7 +7,7 @@ from itertools import chain
 
 class FactorizedRNN(nn.Module):
 
-    def __init__(self, layers_size=opt.layers_size, nb_samples, emb_size=opt.emb_size, data_dir = opt.data_dir):
+    def __init__(self, layers_size=[10,2], nb_samples=1, emb_size=2, data_dir ='.'):
         super(FactorizedRNN, self).__init__()
 
         self.emb_size = emb_size

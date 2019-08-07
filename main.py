@@ -20,18 +20,16 @@ def build_parser():
     parser.add_argument('--batch-size', default=10000, type=int, help="The batch size.")
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
-    
 
     ### Dataset specific options
     parser.add_argument('--data-dir', default='./data/', help='The folder contaning the dataset.')
     parser.add_argument('--data-file', default='.', help='The data file with the dataset.')
     parser.add_argument('--dataset', choices=['kmer'], default='kmer', help='Which dataset to use.')
     parser.add_argument('--transform', default=True,help='log10(exp+1)')
-    
     # Model specific options
     parser.add_argument('--layers-size', default=[250, 75, 50, 25, 10], type=int, nargs='+', help='Number of layers to use.')
     parser.add_argument('--emb_size', default=2, type=int, help='The size of the embeddings.')
-    parser.add_argument('--loss', choice=['NLL', 'MSE'], default = 'MSE', help='The cost function to use')
+    parser.add_argument('--loss', choices=['NLL', 'MSE'], default = 'MSE', help='The cost function to use')
 
     parser.add_argument('--weight-decay', default=1e-5, type=float, help='The size of the embeddings.')
     parser.add_argument('--model', choices=['RNN'], default='RNN', help='Which model to use.')
@@ -83,7 +81,6 @@ def main(argv=None):
     # Training optimizer and stuff
     if opt.loss == 'NLL':
         criterion = torch.nn.NLLLoss()
-        
 
 
     if not opt.cpu:
@@ -93,9 +90,9 @@ def main(argv=None):
     # The training.
     print ("Start training.")
     #monitoring and predictions
-    predictions =np.zeros((dataset.dataset.nb_patient,dataset.dataset.nb_gene))
+    predictions =np.zeros((dataset.dataset.nb_patient,dataset.dataset.nb_kmer))
     indices_patients = np.arange(dataset.dataset.nb_patient)
-    indices_genes = np.arange(dataset.dataset.nb_gene)
+    indices_genes = np.arange(dataset.dataset.nb_kmer)
     xdata = np.transpose([np.tile(indices_genes, len(indices_patients)),
                           np.repeat(indices_patients, len(indices_genes))])
     progress_bar_modulo = len(dataset)/100
