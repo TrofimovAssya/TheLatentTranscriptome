@@ -21,21 +21,28 @@ class KmerDataset(Dataset):
         self.nb_kmer = self.data.shape[1]
         print (self.nb_kmer)
         print (self.nb_patient)
+        indices_p = np.arange(self.data.shape[0])
+        indices_k = np.arange(self.data.shape[1])
+        self.X_data = np.transpose([np.tile(indices_k, len(indices_p)), np.repeat(indices_p, len(indices_k))])
 
-        self.root_dir = root_dir
-        self.X_data, self.Y_data = self.dataset_make(np.array(self.data),log_transform=False)
-        self.X_sample = self.X_data[:,1]
-        self.X_kmer = self.data.columns[self.X_data[:,0]]
-        self.X_kmer = self.transform_kmerseq_table(self.X_kmer)
+
+
+        #self.root_dir = root_dir
+        #self.X_data, self.Y_data = self.dataset_make(np.array(self.data),log_transform=False)
+        #self.X_sample = self.X_data[:,1]
+        #self.X_kmer = self.data.columns[self.X_data[:,0]]
+        #self.X_kmer = self.transform_kmerseq_table(self.X_kmer)
 
     def __len__(self):
         return len(self.X_data)
 
     def __getitem__(self, idx):
 
-        sample = self.X_sample[idx]
-        kmer = self.X_kmer[idx]
-        label = self.Y_data[idx]
+        sample = self.X_data[idx,1]
+        kmer_ix = self.X_data[idx,0]
+        kmer_seq = list(self.data.columns)[kmer_ix]
+        kmer = self.transform_kmerseq_table(self.X_kmer)
+        label = np.array(self.data)[sample,kmer_ix]
 
         sample = [sample, kmer, label]
 
