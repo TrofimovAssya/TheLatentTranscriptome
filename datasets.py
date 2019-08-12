@@ -11,19 +11,19 @@ import pandas as pd
 class KmerDataset(Dataset):
     """Kmer abundance dataset"""
 
-    def __init__(self,root_dir='.',save_dir='.',data_file='data.npy'):
+    def __init__(self,root_dir='.',save_dir='.',data_file='data.npy', nb_patient = 5, nb_kmer = 1000):
 
 
         data_path = os.path.join(root_dir, data_file)
-        self.data = pd.read_csv(data_path,index_col=0)
-
-        self.nb_patient = self.data.shape[0]
-        self.nb_kmer = self.data.shape[1]
+        self.data = pd.read_csv(data_path, header=None)
+        self.data = list(self.data['0'])
+        self.nb_patient = nb_patient
+        self.nb_kmer = nb_kmer
         print (self.nb_kmer)
         print (self.nb_patient)
-        indices_p = np.arange(self.data.shape[0])
-        indices_k = np.arange(self.data.shape[1])
-        self.X_data = np.transpose([np.tile(indices_k, len(indices_p)), np.repeat(indices_p, len(indices_k))])
+        #indices_p = np.arange(self.data.shape[0])
+        #indices_k = np.arange(self.data.shape[1])
+        #self.X_data = np.transpose([np.tile(indices_k, len(indices_p)), np.repeat(indices_p, len(indices_k))])
 
 
 
@@ -34,15 +34,15 @@ class KmerDataset(Dataset):
         #self.X_kmer = self.transform_kmerseq_table(self.X_kmer)
 
     def __len__(self):
-        return len(self.X_data)
+        return self.nb_kmer*self.nb_patient
 
     def __getitem__(self, idx):
-        fname_sample = f''
-        fname_kmer = f''
-        fname_label = f''
-        sample = pd.read_csv()
-        kmer = pd.read_csv()
-        label = pd.read_csv()
+        fname_sample = f'{self.data[idx]}_samples.npy'
+        fname_kmer = f'{self.data[idx]}_kmers.npy'
+        fname_label = f'{self.data[idx]}_targets.npy'
+        sample = np.load(fname_sample)
+        kmer = np.load(fname_kmer)
+        label = np.load(fname_label)
         sample = [sample, kmer, label]
 
         return sample
@@ -86,7 +86,7 @@ class KmerDataset(Dataset):
 def get_dataset(opt, exp_dir):
 
     if opt.dataset == 'kmer':
-        dataset = KmerDataset(root_dir=opt.data_dir, save_dir =exp_dir,data_file = opt.data_file)
+        dataset = KmerDataset(root_dir=opt.data_dir, save_dir =exp_dir,data_file = opt.data_file, nb_patient = opt.nb_patient, nb_kmer = opt.nb_kmer)
     else:
         raise NotImplementedError()
 
@@ -95,5 +95,5 @@ def get_dataset(opt, exp_dir):
     return dataloader
 
 def preprocessing(data_dir,fname):
-    os.mkdir(f'{data_dir}/batches/')
+    pass
 

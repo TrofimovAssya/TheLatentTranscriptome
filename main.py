@@ -17,7 +17,7 @@ def build_parser():
     ### Hyperparameter options
     parser.add_argument('--epoch', default=10, type=int, help='The number of epochs we want ot train the network.')
     parser.add_argument('--seed', default=260389, type=int, help='Seed for random initialization and stuff.')
-    parser.add_argument('--batch-size', default=10000, type=int, help="The batch size.")
+    parser.add_argument('--batch-size', default=1, type=int, help="The batch size.")
     parser.add_argument('--lr', default=1e-3, type=float, help='learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
 
@@ -26,6 +26,8 @@ def build_parser():
     parser.add_argument('--data-file', default='.', help='The data file with the dataset.')
     parser.add_argument('--dataset', choices=['kmer'], default='kmer', help='Which dataset to use.')
     parser.add_argument('--transform', default=True,help='log10(exp+1)')
+    parser.add_argument('--nb-patient', default=5,type=int, help='nb of different patients')
+    parser.add_argument('--nb-kmer', default=1000,type=int, help='nb of different kmers')
     # Model specific options
     parser.add_argument('--layers-size', default=[250, 75, 50, 25, 10], type=int, nargs='+', help='Number of layers to use.')
     parser.add_argument('--emb_size', default=2, type=int, help='The size of the embeddings.')

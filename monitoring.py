@@ -5,6 +5,16 @@ import torch
 import shutil
 import models
 import datetime
+import pandas as pd
+
+
+class TranscriptomeGenerator(object):
+    """creating a genome with genes and reads and kmers"""
+    def __init__(self, arg):
+        super(ClassName, self).__init__()
+        self.arg = arg
+        
+
 
 def create_experiment_folder(opt):
 
