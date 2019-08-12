@@ -37,13 +37,12 @@ class KmerDataset(Dataset):
         return len(self.X_data)
 
     def __getitem__(self, idx):
-
-        sample = self.X_data[idx,1]
-        kmer_ix = self.X_data[idx,0]
-        kmer_seq = list(self.data.columns)[kmer_ix]
-        kmer = self.transform_kmerseq_table(self.X_kmer)
-        label = np.array(self.data)[sample,kmer_ix]
-
+        fname_sample = f''
+        fname_kmer = f''
+        fname_label = f''
+        sample = pd.read_csv()
+        kmer = pd.read_csv()
+        label = pd.read_csv()
         sample = [sample, kmer, label]
 
         return sample
@@ -94,3 +93,7 @@ def get_dataset(opt, exp_dir):
     #TODO: check the num_worker, might be important later on, for when we will use a bunch of big files.
     dataloader = DataLoader(dataset, batch_size=opt.batch_size,shuffle=True,num_workers=1)
     return dataloader
+
+def preprocessing(data_dir,fname):
+    os.mkdir(f'{data_dir}/batches/')
+
