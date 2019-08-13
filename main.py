@@ -92,23 +92,9 @@ def main(argv=None):
     # The training.
     print ("Start training.")
     #monitoring and predictions
-    predictions =np.zeros((dataset.dataset.nb_patient,dataset.dataset.nb_kmer))
-    indices_patients = np.arange(dataset.dataset.nb_patient)
-    indices_genes = np.arange(dataset.dataset.nb_kmer)
-    xdata = np.transpose([np.tile(indices_genes, len(indices_patients)),
-                          np.repeat(indices_patients, len(indices_genes))])
-    progress_bar_modulo = len(dataset)/100
     for t in range(epoch, opt.epoch):
 
         start_timer = time.time()
-
-        if opt.save_error:
-            outfname_g = '_'.join(['gene_epoch',str(t),'prediction.npy'])
-            outfname_g = os.path.join(exp_dir,outfname_g)
-            outfname_t = '_'.join(['tissue_epoch',str(t),'prediction.npy'])
-            outfname_t = os.path.join(exp_dir,outfname_t)
-            train_trace = np.zeros((dataset.dataset.nb_gene, dataset.dataset.nb_patient))
-
         for no_b, mini in enumerate(dataset):
 
             inputs_s, inputs_k, targets = mini[0], mini[1], mini[2]
@@ -121,11 +107,12 @@ def main(argv=None):
                 inputs_s = inputs_s.cuda(opt.gpu_selection)
                 inputs_k = inputs_k.cuda(opt.gpu_selection)
                 targets = targets.cuda(opt.gpu_selection)
-
             # Forward pass: Compute predicted y by passing x to the model
+            inputs_k = inputs_k.view(-1,31,4)
             y_pred = my_model(inputs_k,inputs_s).float()
+            #import pdb; pdb.set_trace()
 
-            targets = torch.reshape(targets,(targets.shape[0],1))
+            #targets = torch.reshape(targets,(targets.shape[0],1))
             # Compute and print loss
 
             loss = criterion(y_pred, targets)

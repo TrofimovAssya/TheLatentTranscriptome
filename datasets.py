@@ -11,12 +11,11 @@ import pandas as pd
 class KmerDataset(Dataset):
     """Kmer abundance dataset"""
 
-    def __init__(self,root_dir='.',save_dir='.',data_file='data.npy', nb_patient = 5, nb_kmer = 1000):
-
-
+    def __init__(self,root_dir='.',save_dir='.', data_file='data.npy', nb_patient = 5, nb_kmer = 1000):
+        self.root_dir = root_dir
         data_path = os.path.join(root_dir, data_file)
         self.data = pd.read_csv(data_path, header=None)
-        self.data = list(self.data['0'])
+        self.data = list(self.data[0])
         self.nb_patient = nb_patient
         self.nb_kmer = nb_kmer
         print (self.nb_kmer)
@@ -34,14 +33,15 @@ class KmerDataset(Dataset):
         #self.X_kmer = self.transform_kmerseq_table(self.X_kmer)
 
     def __len__(self):
-        return self.nb_kmer*self.nb_patient
+        return len(self.data)
 
     def __getitem__(self, idx):
-        fname_sample = f'{self.data[idx]}_samples.npy'
-        fname_kmer = f'{self.data[idx]}_kmers.npy'
-        fname_label = f'{self.data[idx]}_targets.npy'
+        fname_sample = f'{self.root_dir}/{self.data[idx]}__samples.npy'
+        fname_kmer = f'{self.root_dir}/{self.data[idx]}__kmers.npy'
+        fname_label = f'{self.root_dir}/{self.data[idx]}__targets.npy'
         sample = np.load(fname_sample)
         kmer = np.load(fname_kmer)
+        kmer = kmer[np.tile(np.arange(kmer.shape[0]), self.nb_patient)]
         label = np.load(fname_label)
         sample = [sample, kmer, label]
 

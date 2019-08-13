@@ -50,7 +50,9 @@ class FactorizedRNN(nn.Module):
 
         # Get the embeddings
         emb_1, emb_2 = self.get_embeddings(x1, x2)
-        
+        emb_2 = emb_2.view(-1,2)
+        if not emb_1.shape == emb_2.shape:
+            import pdb; pdb.set_trace()
         mlp_input = torch.cat([emb_1, emb_2], 1)
         # Forward pass.
         for layer in self.mlp_layers:
