@@ -91,7 +91,7 @@ def get_dataset(opt, exp_dir):
         raise NotImplementedError()
 
     #TODO: check the num_worker, might be important later on, for when we will use a bunch of big files.
-    dataloader = DataLoader(dataset, batch_size=opt.batch_size,shuffle=True,num_workers=1)
+    dataloader = DataLoader(dataset, batch_size=opt.batch_size,shuffle=False,num_workers=1)
     return dataloader
 
 def preprocessing(data_dir,fname):

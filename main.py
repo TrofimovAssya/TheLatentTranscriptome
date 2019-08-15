@@ -85,6 +85,7 @@ def main(argv=None):
         criterion = torch.nn.NLLLoss()
 
 
+    os.mkdir(f'{exp_dir}/kmer_embs/')
     if not opt.cpu:
         print ("Putting the model on gpu...")
         my_model.cuda(opt.gpu_selection)
@@ -127,9 +128,13 @@ def main(argv=None):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            kmerembs_batch = my_model.get_embeddings(inputs_k, inputs_s)[0]
+            kmerembs = kmerembs_batch[:int(kmerembs_batch.shape[0]/opt.nb_patient)]
+            np.save(f'{exp_dir}/kmer_embs/kmer_embs_batch_{no_b}',kmerembs.cpu().data.numpy())
 
         #print ("Saving the model...")
         monitoring.save_checkpoint(my_model, optimizer, t, opt, exp_dir)
+
 
 
 if __name__ == '__main__':
