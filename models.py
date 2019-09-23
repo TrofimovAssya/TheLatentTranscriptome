@@ -17,14 +17,18 @@ class FactorizedRNN(nn.Module):
         # input_size is the 4 nucleotides as a one-hot
         # hidden_size is the RNN output
         # this rnn gives the kmer embedding
-        self.rnn = nn.LSTM(input_size=4, hidden_size=2, bias=True,
-                                  batch_first=True, bidirectional=False, num_layers=1)
+        #self.rnn = nn.LSTM(input_size=4 , hidden_size=2, bias=True,
+        #                          batch_first=True, bidirectional=False, num_layers=1)
         
+        self.conv1 = nn.Conv1d(in_channels = 4,out_channels = 1,kernel_size = 3,stride = 1)
+        self.conv2 = nn.Conv1d(in_channels = 1,out_channels = 1,kernel_size = 3,stride = 2)
+        self.conv3 = nn.Conv1d(in_channels = 1,out_channels = 1,kernel_size = 3,stride = 7)
+
         self.emb_1 = nn.Embedding(self.sample, emb_size)
         
 
         layers = []
-        dim = [emb_size * 2] + layers_size # Adding the emb size.
+        dim = [emb_size + 2] + layers_size # Adding the emb size. (2d embeddings for the kmers)
 
         for size_in, size_out in zip(dim[:-1], dim[1:]):
             layer = nn.Linear(size_in, size_out)
@@ -40,8 +44,12 @@ class FactorizedRNN(nn.Module):
 
         kmer, patient = x1, x2
         # Kmer Embedding.
-        _, (h, c) = self.rnn(kmer)
-        kmer = h.squeeze() # get rid of extra dimension
+        #_, (h, c) = self.rnn(kmer)
+        #kmer = h.squeeze() # get rid of extra dimension
+        kmer = self.conv1(kmer)
+        kmer = self.conv2(kmer)
+        kmer = self.conv3(kmer)
+        kemr = kmer.squeeze()
         # Patient Embedding
         patient = self.emb_1(patient.long())        
         return kmer, patient
